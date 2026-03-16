@@ -1,6 +1,7 @@
 import { greyColor, primaryColor } from '@/constants/theme';
 import { Checkbox } from 'expo-checkbox';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -63,7 +64,7 @@ export default function HomeScreen() {
     return (
       <View>
         <TouchableOpacity
-          onPress={() => alert('halo')}
+          onPress={() => router.push('/add-task')}
           style={{ marginHorizontal: 16 }}
         >
           <LinearGradient
