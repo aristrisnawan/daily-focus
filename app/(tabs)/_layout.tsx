@@ -15,6 +15,10 @@ export default function TabLayout() {
         tabBarActiveTintColor: primaryColor,
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          borderTopRightRadius: 25,
+          borderTopLeftRadius: 25,
+        }
       }}>
       <Tabs.Screen
         name="index"
@@ -24,10 +28,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="statistic"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Statistic',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chart.bar.fill" color={color} />,
         }}
       />
     </Tabs>

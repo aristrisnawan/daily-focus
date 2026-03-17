@@ -26,9 +26,12 @@ const AddTask = () => {
     const [deadline, setDeadline] = useState<Date | undefined>(undefined);
     const [showPicker, setShowPicker] = useState(false);
 
+    const minDate = new Date();
+    minDate.setHours(0, 0, 0, 0);
+
     const onChange = (_: any, selectedDate?: Date) => {
         setShowPicker(Platform.OS === "ios");
-        if (selectedDate) {
+        if (selectedDate && selectedDate >= minDate) {
             setDeadline(selectedDate);
         }
     };
@@ -63,9 +66,10 @@ const AddTask = () => {
 
                 {showPicker && (
                     <DateTimePicker
-                        value={deadline ?? new Date()}
+                        value={deadline ?? minDate}
                         mode="date"
                         display="default"
+                        minimumDate={minDate}
                         onChange={onChange}
                     />
                 )}
