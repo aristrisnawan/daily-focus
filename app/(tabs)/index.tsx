@@ -1,4 +1,6 @@
+import { fetchTasks, updateTodoStatus } from '@/api/task';
 import { greyColor, primaryColor } from '@/constants/theme';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Checkbox } from 'expo-checkbox';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -6,15 +8,26 @@ import { useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+type Task = { id: string; title: string; done: boolean; date?: string; type: 'task' };
+type Habit = { id: string; title: string; done: boolean; type: 'habit' };
+type Section = { type: 'section'; title: string };
+type AddButton = { type: 'addButton' };
+type Item = Task | Habit | Section | AddButton;
+
 export default function HomeScreen() {
-  const [tasks, setTasks] = useState([
-    { id: '1', title: 'Finish React Native project', done: false },
-    { id: '2', title: 'Write README', done: true },
-    { id: '3', title: 'Publish to Expo', done: false },
-    { id: '4', title: 'Share on Twitter', done: false },
-    { id: '5', title: 'Celebrate 🎉', done: false },
-    { id: '6', title: 'Go for a walk', done: true },
-  ]);
+  const queryClient = useQueryClient();
+
+  const {data: tasksData = [], isLoading, isError, error} = useQuery({
+    queryKey: ['tasks'],
+    queryFn: fetchTasks
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: updateTodoStatus,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    }
+  })
 
   const [habits, setHabits] = useState([
     { id: '1', title: 'Morning Exercise', done: true },
@@ -26,12 +39,13 @@ export default function HomeScreen() {
     setHabits(prev => prev.map(h => (h.id === habitId ? { ...h, done } : h)));
   };
 
-  const toggleTask = (taskId: string, done: boolean) => {
-    setTasks(prev => prev.map(t => (t.id === taskId ? { ...t, done } : t)));
-  };
+  const handleToggleTask = (task: Task) => {
+    const updateTask = {...task, done: !task.done}
+    updateMutation.mutate(updateTask)
+  }
 
-  const completedCount = tasks.filter(t => t.done).length;
-  const progressPercent = tasks.length ? Math.round((completedCount / tasks.length) * 100) : 0;
+  const completedCount = tasksData.filter(t => t.done).length;
+  const progressPercent = tasksData.length ? Math.round((completedCount / tasksData.length) * 100) : 0;
 
   const Header = () => {
     return (
@@ -40,7 +54,7 @@ export default function HomeScreen() {
           <Text style={[styles.profileText, { fontWeight: 'bold' }]}>Hello Aris 👋</Text>
           <Text style={[styles.profileText, { fontWeight: 'normal' }]}>Let's be productive today!</Text>
         </View>
-        <View style={[styles.progressContainer, {marginBottom: 10}]}>
+        <View style={[styles.progressContainer, { marginBottom: 10 }]}>
           <Text style={styles.fontProgress}>Today's Progress</Text>
           <Text style={styles.fontProgress}>{`${progressPercent}%`}</Text>
           <View style={styles.progressBar}>
@@ -53,79 +67,108 @@ export default function HomeScreen() {
               <Text style={styles.progressText}>{`${progressPercent}%`}</Text>
             </View>
           </View>
-          <Text>{`${completedCount} / ${tasks.length} tasks completed`}</Text>
+          <Text>{`${completedCount} / ${tasksData.length} tasks completed`}</Text>
         </View>
-        <Text style={[styles.fontProgress, { fontWeight: 'bold', marginVertical: 10, paddingHorizontal: 16 }]}>Today's Tasks</Text>
       </View>
     )
   }
 
-  const Footer = () => {
-    return (
-      <View>
-        <TouchableOpacity
-          onPress={() => router.push('/add-task')}
-          style={{ marginHorizontal: 16 }}
-        >
-          <LinearGradient
-            colors={['#FF8C00', '#FFD150']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.btnAdd}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>Add Task</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-        <View style={{ padding: 16 }}>
-          <Text style={[styles.fontProgress, { fontWeight: 'bold', marginBottom: 10 }]}>Today's Habits</Text>
-          {habits.map(habit => (
-            <View
-              key={habit.id}
-              style={styles.checkboxStyle}
-            >
-              <Checkbox value={habit.done} onValueChange={value => toggleHabit(habit.id, value)} />
-              <Text
-                style={{
-                  marginLeft: 8,
-                  textDecorationLine: habit.done ? 'line-through' : 'none',
-                  color: habit.done ? 'gray' : 'black',
-                }}
-              >
-                {habit.title}
-              </Text>
-            </View>
-          ))}
-        </View>
-      </View>
-    )
-  }
+  const combinatedData: Item[] = [
+    { type: "section", title: "Today's Tasks" },
+
+    ...tasksData.map((task) => ({
+      ...task,
+      type: "task",
+    })),
+
+    { type: "addButton" } as any,
+
+    { type: "section", title: "Today's Habits" },
+
+    ...habits.map((habit) => ({
+      ...habit,
+      type: "habit",
+    }) as Habit),
+  ];
+
 
   return (
     <SafeAreaProvider>
       <FlatList
-        keyExtractor={(task) => task.id}
-        data={tasks}
+        data={combinatedData}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ paddingBottom: 16 }}
         ListHeaderComponent={<Header />}
-        renderItem={({ item: task }) => {
-          return (
-            <View
-              key={task.id}
-              style={[styles.checkboxStyle, { marginHorizontal: 16 }]}
-            >
-              <Checkbox value={task.done} onValueChange={value => toggleTask(task.id, value)} />
-              <Text
-                style={{
-                  marginLeft: 8,
-                  textDecorationLine: task.done ? 'line-through' : 'none',
-                  color: task.done ? 'gray' : 'black',
-                }}
-              >
-                {task.title}
+        renderItem={({ item }: { item: Item }) => {
+
+          if (item.type === 'section') {
+            return (
+              <Text style={[styles.fontProgress, { fontWeight: 'bold', marginVertical: 10, paddingHorizontal: 16 }]}>
+                {item.title}
               </Text>
-            </View>
-          )
+            );
+          }
+
+          if (item.type === 'task') {
+            return (
+              <View style={[styles.checkboxStyle, { marginHorizontal: 16 }]}>
+                <Checkbox
+                  value={item.done}
+                  onValueChange={() => handleToggleTask(item)}
+                />
+                <Text
+                  style={{
+                    marginLeft: 8,
+                    textDecorationLine: item.done ? 'line-through' : 'none',
+                    color: item.done ? 'gray' : 'black',
+                  }}
+                >
+                  {item.title}
+                </Text>
+              </View>
+            );
+          }
+
+          if (item.type === 'habit') {
+            return (
+              <View style={[styles.checkboxStyle, { marginHorizontal: 16 }]}>
+                <Checkbox
+                  value={item.done}
+                  onValueChange={(value) => toggleHabit(item.id, value)}
+                />
+                <Text
+                  style={{
+                    marginLeft: 8,
+                    textDecorationLine: item.done ? 'line-through' : 'none',
+                    color: item.done ? 'gray' : 'black',
+                  }}
+                >
+                  {item.title}
+                </Text>
+              </View>
+            );
+          }
+
+          if (item.type === 'addButton') {
+            return (
+              <TouchableOpacity
+                onPress={() => router.push('/add-task')}
+                style={{ marginHorizontal: 16 }}
+              >
+                <LinearGradient
+                  colors={['#FF8C00', '#FFD150']}
+                  style={styles.btnAdd}
+                >
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                    Add Task
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            );
+          }
+
+          return null;
         }}
-        ListFooterComponent={<Footer />}
       />
     </SafeAreaProvider>
   );

@@ -1,0 +1,81 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Workout",
+      "done": true,
+      "date": "2026-03-16",
+      "type": "task"
+    },
+    {
+      "id": "2",
+      "title": "Study React Native",
+      "done": false,
+      "date": "2026-03-16",
+      "type": "task"
+    },
+    {
+      "id": "3",
+      "title": "Read a book",
+      "done": false,
+      "date": "2026-03-16",
+      "type": "task"
+    }
+  ],
+  "habits": [
+    {
+      "id": "1",
+      "name": "Drink Water",
+      "icon": "💧"
+    },
+    {
+      "id": "2",
+      "name": "Reading",
+      "icon": "📚"
+    },
+    {
+      "id": "3",
+      "name": "Meditation",
+      "icon": "🧘"
+    }
+  ],
+  "habitLogs": [
+    {
+      "id": "1",
+      "habitId": "1",
+      "date": "2026-03-14",
+      "completed": true
+    },
+    {
+      "id": "2",
+      "habitId": "1",
+      "date": "2026-03-15",
+      "completed": true
+    },
+    {
+      "id": "3",
+      "habitId": "1",
+      "date": "2026-03-16",
+      "completed": true
+    },
+    {
+      "id": "4",
+      "habitId": "2",
+      "date": "2026-03-14",
+      "completed": true
+    },
+    {
+      "id": "5",
+      "habitId": "2",
+      "date": "2026-03-15",
+      "completed": false
+    },
+    {
+      "id": "6",
+      "habitId": "2",
+      "date": "2026-03-16",
+      "completed": true
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
