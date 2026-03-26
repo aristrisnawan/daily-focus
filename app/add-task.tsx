@@ -1,6 +1,8 @@
+import { addTask } from "@/api/task";
 import { primaryColor } from "@/constants/theme";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -23,8 +25,32 @@ function formatDate(date?: Date) {
 }
 
 const AddTask = () => {
+    const queryClient = useQueryClient()
+    const [title, setTitle] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
     const [deadline, setDeadline] = useState<Date | undefined>(undefined);
     const [showPicker, setShowPicker] = useState(false);
+
+    const addTaskMutation = useMutation({
+        mutationFn: addTask,
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['tasks']})
+            router.back();
+        }
+    })
+
+    const handleAddTask = () => {
+        if (!title.trim()) {
+            alert('Task title cannot be empty');
+            return;
+        }
+        
+        addTaskMutation.mutate({
+            title: title.trim(),
+            description: description.trim() || undefined,
+            date: deadline?.toISOString(),
+        });
+    }
 
     const minDate = new Date();
     minDate.setHours(0, 0, 0, 0);
@@ -42,12 +68,16 @@ const AddTask = () => {
                 <Text>Title</Text>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <TextInput
+                        value={title}
+                        onChangeText={setTitle}
                         style={{ borderWidth: 1, borderColor: 'gray', borderRadius: 5, padding: 8, marginTop: 8 }}
                         placeholder="Enter task title" />
                 </TouchableWithoutFeedback>
                 <Text style={{ marginTop: 16 }}>Description</Text>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <TextInput
+                        value={description}
+                        onChangeText={setDescription}
                         style={{ borderWidth: 1, borderColor: 'gray', borderRadius: 5, padding: 8, marginTop: 8, height: 100 }}
                         multiline={true}
                         numberOfLines={10}
@@ -80,8 +110,12 @@ const AddTask = () => {
                     <TouchableOpacity onPress={() => router.back()} style={{ flex: 1, backgroundColor: 'gray', padding: 10, borderRadius: 5 }}>
                         <Text style={{ color: 'white', textAlign: 'center' }}>Cancel</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ flex: 1, backgroundColor: primaryColor, padding: 10, borderRadius: 5 }}>
-                        <Text style={{ color: 'white', textAlign: 'center' }}>Add</Text>
+                    <TouchableOpacity 
+                        onPress={handleAddTask}
+                        disabled={!title || addTaskMutation.isPending}
+                        style={{ flex: 1, backgroundColor: primaryColor, padding: 10, borderRadius: 5, opacity: !title || addTaskMutation.isPending ? 0.6 : 1 }}
+                    >
+                        <Text style={{ color: 'white', textAlign: 'center' }}>{addTaskMutation.isPending ? 'Adding...' : 'Add'}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

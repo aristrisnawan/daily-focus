@@ -1,4 +1,4 @@
-import { fetchTasks, updateTodoStatus } from '@/api/task';
+import { fetchTasks, updateTaskStatus } from '@/api/task';
 import { greyColor, primaryColor } from '@/constants/theme';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Checkbox } from 'expo-checkbox';
@@ -23,7 +23,7 @@ export default function HomeScreen() {
   })
 
   const updateMutation = useMutation({
-    mutationFn: updateTodoStatus,
+    mutationFn: updateTaskStatus,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] })
     }
@@ -72,6 +72,14 @@ export default function HomeScreen() {
       </View>
     )
   }
+
+  const toTitleCase = (text: string) => {
+  return text
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 
   const combinatedData: Item[] = [
     { type: "section", title: "Today's Tasks" },
@@ -123,7 +131,7 @@ export default function HomeScreen() {
                     color: item.done ? 'gray' : 'black',
                   }}
                 >
-                  {item.title}
+                  {toTitleCase(item.title)}
                 </Text>
               </View>
             );

@@ -4,6 +4,7 @@
       "id": "1",
       "title": "Workout",
       "done": true,
+      "description": "Go to the gym and do a full body workout",
       "date": "2026-03-16",
       "type": "task"
     },
@@ -11,6 +12,7 @@
       "id": "2",
       "title": "Study React Native",
       "done": false,
+      "description": "Complete the React Native tutorial and build a sample app",
       "date": "2026-03-16",
       "type": "task"
     },
@@ -18,8 +20,23 @@
       "id": "3",
       "title": "Read a book",
       "done": false,
+      "description": "Read 'Atomic Habits' by James Clear",
       "date": "2026-03-16",
       "type": "task"
+    },
+    {
+      "id": "1774504761642",
+      "title": "mancing",
+      "description": "Mancing mania mantap",
+      "date": "2026-03-25T17:00:00.000Z",
+      "done": false,
+      "type": "task"
+    },
+    {
+      "id": "1774505122040",
+      "title": "Build portofolio",
+      "date": "2026-03-27T17:00:00.000Z",
+      "done": false
     }
   ],
   "habits": [
