@@ -1,4 +1,4 @@
-const API_URL = 'http://10.152.186.57:3000';
+export const API_URL = 'http://10.152.186.57:3000';
 
 
 interface HabitLog {
@@ -6,12 +6,6 @@ interface HabitLog {
   habitId: string;
   date: string;
   completed: boolean;
-}
-
-interface Habit {
-  id: string;
-  name: string;
-  icon: string;
 }
 
 export interface Task {
