@@ -4,6 +4,23 @@ interface Habit {
     id: string;
     name: string;
     icon?: string;
+    done: boolean;
+}
+
+interface HabitLog {
+  id: string;
+  habitId: string;
+  date: string;
+  completed: boolean;
+}
+
+export async function fetchHabitsLog(): Promise<HabitLog[]> {
+    const response = await fetch(`${API_URL}/habitLogs`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch habit logs');
+    }
+    const data = await response.json();
+    return data;
 }
 
 export async function fetchHabits(): Promise<Habit[]> {

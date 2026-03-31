@@ -1,19 +1,30 @@
+import { fetchHabitsLog } from "@/api/habbit";
+import { fetchTasks } from "@/api/task";
 import { greyColor, primaryColor, secondaryColor } from "@/constants/theme";
+import { getBestStreak } from "@/function/getBestStreak";
+import { getCurrentStreak } from "@/function/getCurrentStreak";
+import { getWeeklyProgress } from "@/function/getWeeklyProgress";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useQuery } from "@tanstack/react-query";
 import { StyleSheet, Text, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Statistic = () => {
-    const barData = [
-        { value: 250, label: 'M' },
-        { value: 500, label: 'T' },
-        { value: 745, label: 'W' },
-        { value: 320, label: 'T' },
-        { value: 600, label: 'F' },
-        { value: 256, label: 'S' },
-        { value: 300, label: 'S' },
-    ];
+    const { data: tasksData = [] } = useQuery({
+        queryKey: ['tasks'],
+        queryFn: fetchTasks
+    })
+    const {data: habitsData = []} = useQuery({
+        queryKey: ['habitslog'],
+        queryFn: fetchHabitsLog
+    })
+    const barData = getWeeklyProgress(tasksData);
+    const totalTasksComplated = tasksData.filter(t => t.done).length;
+    const totalHabitsCompleted = habitsData.filter(h => h.completed).length;
+    const currentStreak = getCurrentStreak(tasksData)
+    const bestStreak = getBestStreak(tasksData)
+
     return (
         <SafeAreaView>
             <View style={[styles.container, { marginTop: 16 }]}>
@@ -25,7 +36,7 @@ const Statistic = () => {
                     <Text>☆☆☆☆☆</Text>
                 </View>
                 <Text style={styles.countCompleted}>
-                    20
+                    {totalTasksComplated}
                 </Text>
             </View>
             <View style={[styles.container, { marginTop: 10 }]}>
@@ -37,7 +48,7 @@ const Statistic = () => {
                     <Text>☆☆☆☆☆</Text>
                 </View>
                 <Text style={styles.countCompleted}>
-                    20
+                    {totalHabitsCompleted}
                 </Text>
             </View>
             <View style={[styles.container, { marginTop: 10 }]}>
@@ -47,8 +58,8 @@ const Statistic = () => {
                     <Text>Best Streak</Text>
                 </View>
                 <View style={styles.countCurrentStreak}>
-                    <Text style={styles.countCurrentStreakText}>2 days</Text>
-                    <Text style={styles.countCurrentStreakText}>5 days</Text>
+                    <Text style={styles.countCurrentStreakText}>{currentStreak} days</Text>
+                    <Text style={styles.countCurrentStreakText}>{bestStreak} days</Text>
                 </View>
             </View>
             <View style={{ marginHorizontal: 16, marginTop: 10 }}>
@@ -98,3 +109,4 @@ const styles = StyleSheet.create({
         fontSize: 12
     }
 })
+
