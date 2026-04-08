@@ -34,6 +34,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="chart.bar.fill" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="cleanup"
+        options={{
+          title: 'Cleanup',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="trash.fill" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }

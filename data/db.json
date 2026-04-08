@@ -4,56 +4,117 @@
       "id": "1",
       "title": "Workout",
       "done": true,
-      "description": "Go to the gym and do a full body workout",
-      "date": "2026-03-16",
-      "type": "task"
+      "date": "2026-03-25",
+      "isArchived": true
     },
     {
       "id": "2",
       "title": "Study React Native",
       "done": false,
-      "description": "Complete the React Native tutorial and build a sample app",
-      "date": "2026-03-16",
-      "type": "task"
+      "date": "2026-03-25"
     },
     {
       "id": "3",
-      "title": "Read a book",
-      "done": false,
-      "description": "Read 'Atomic Habits' by James Clear",
-      "date": "2026-03-16",
-      "type": "task"
+      "title": "Read Book",
+      "done": true,
+      "date": "2026-03-26",
+      "isArchived": true
     },
     {
-      "id": "1774504761642",
-      "title": "mancing",
-      "description": "Mancing mania mantap",
-      "date": "2026-03-25T17:00:00.000Z",
-      "done": false,
-      "type": "task"
+      "id": "4",
+      "title": "Coding Practice",
+      "done": true,
+      "date": "2026-03-26",
+      "isArchived": true
     },
     {
-      "id": "1774505122040",
-      "title": "Build portofolio",
-      "date": "2026-03-27T17:00:00.000Z",
-      "done": false
+      "id": "5",
+      "title": "Exercise",
+      "done": false,
+      "date": "2026-03-27"
+    },
+    {
+      "id": "6",
+      "title": "Meditation",
+      "done": false,
+      "date": "2026-03-27"
+    },
+    {
+      "id": "7",
+      "title": "Build Portfolio",
+      "done": true,
+      "date": "2026-03-28",
+      "isArchived": true
+    },
+    {
+      "id": "8",
+      "title": "Apply Job",
+      "done": false,
+      "date": "2026-03-28"
+    },
+    {
+      "id": "9",
+      "title": "Workout",
+      "done": true,
+      "date": "2026-03-29",
+      "isArchived": true
+    },
+    {
+      "id": "10",
+      "title": "Study Data Science",
+      "done": true,
+      "date": "2026-03-29",
+      "isArchived": true
+    },
+    {
+      "id": "11",
+      "title": "Read Quran",
+      "done": false,
+      "date": "2026-03-30"
+    },
+    {
+      "id": "12",
+      "title": "Exercise",
+      "done": true,
+      "date": "2026-03-30",
+      "isArchived": true
+    },
+    {
+      "id": "13",
+      "title": "Coding Project",
+      "done": true,
+      "date": "2026-03-31",
+      "isArchived": true
+    },
+    {
+      "id": "14",
+      "title": "Learn English",
+      "done": true,
+      "date": "2026-03-31",
+      "isArchived": true
     }
   ],
   "habits": [
     {
       "id": "1",
       "name": "Drink Water",
-      "icon": "💧"
+      "icon": "💧",
+      "type": "habit",
+      "done": true
     },
     {
       "id": "2",
       "name": "Reading",
-      "icon": "📚"
+      "icon": "📚",
+      "type": "habit",
+      "done": false
     },
     {
       "id": "3",
       "name": "Meditation",
-      "icon": "🧘"
+      "icon": "🧘",
+      "type": "habit",
+      "done": false
     }
   ],
   "habitLogs": [
@@ -93,6 +154,5 @@
       "date": "2026-03-16",
       "completed": true
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

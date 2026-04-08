@@ -1,15 +1,16 @@
-// export const API_URL = 'http://10.152.186.57:3000';
-export const API_URL = 'http://10.65.50.36:3000';
+export const API_URL = 'http://192.168.1.12:3000';
+// export const API_URL = 'http://10.65.50.28:3000';
 
 
 
 
 export interface Task {
-  id: string;
-  title: string;
-  done: boolean;
-  description?: string;
-  date?: string;
+    id: string;
+    title: string;
+    done: boolean;
+    description?: string;
+    date?: string;
+    isArchived?: boolean;
 }
 
 export async function fetchTasks(): Promise<Task[]> {
@@ -22,7 +23,7 @@ export async function fetchTasks(): Promise<Task[]> {
 }
 
 export async function updateTaskStatus(task: Task): Promise<Task> {
-    const response = await fetch(`${API_URL}/tasks/${task.id}`,{
+    const response = await fetch(`${API_URL}/tasks/${task.id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -58,3 +59,17 @@ export async function addTask(taskData: { title: string; description?: string; d
     return data;
 }
 
+export async function cleanupTasks(): Promise<void> {
+    const tasks = await fetchTasks();
+    const completedTasks = tasks.filter(t => t.done && !t.isArchived);
+    
+    await Promise.all(completedTasks.map(task => 
+        fetch(`${API_URL}/tasks/${task.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ isArchived: true }),
+        })
+    ));
+}

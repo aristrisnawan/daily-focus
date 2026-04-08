@@ -61,8 +61,10 @@ export default function HomeScreen() {
     updateHabitMutatoin.mutate(updateHabit)
   }
 
-  const completedCount = tasksData.filter(t => t.done).length;
-  const progressPercent = tasksData.length ? Math.round((completedCount / tasksData.length) * 100) : 0;
+  const activeTasksData = tasksData.filter(t => !t.isArchived);
+
+  const completedCount = activeTasksData.filter(t => t.done).length;
+  const progressPercent = activeTasksData.length ? Math.round((completedCount / activeTasksData.length) * 100) : 0;
 
 
 
@@ -86,7 +88,7 @@ export default function HomeScreen() {
               <Text style={styles.progressText}>{`${progressPercent}%`}</Text>
             </View>
           </View>
-          <Text>{`${completedCount} / ${tasksData.length} tasks completed`}</Text>
+          <Text>{`${completedCount} / ${activeTasksData.length} tasks completed`}</Text>
         </View>
       </View>
     )
@@ -103,7 +105,7 @@ export default function HomeScreen() {
   const combinatedData: Item[] = [
     { type: "section", title: "Today's Tasks" },
 
-    ...tasksData.map((task) => ({
+    ...activeTasksData.map((task) => ({
       ...task,
       type: "task",
     })),
@@ -118,7 +120,7 @@ export default function HomeScreen() {
     })),
   ];
 
-  const isTasksEmpty = tasksData.length === 0;
+  const isTasksEmpty = activeTasksData.length === 0;
   const isHabitsEmpty = habitsData.length === 0;
   const isAllDataEmpty = isTasksEmpty && isHabitsEmpty;
 
