@@ -69,10 +69,4 @@ npx expo start
 
 Press `a` to run on an Android emulator, `i` to run on an iOS simulator, or scan the QR code with the Expo Go app on your physical device.
 
----
 
-## 🎨 Theme Details
-The app uses a customized theme defined in `constants/theme.ts`:
-- **Primary**: Highlight and action elements.
-- **Secondary**: Success identifiers.
-- **Grey**: Background for text boxes and containers.
