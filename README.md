@@ -1,50 +1,78 @@
-# Welcome to your Expo app 👋
+# Todo & Habit Tracker (React Native)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A daily task and habit tracking application built with **React Native (Expo)**. This app helps users stay productive by tracking their daily tasks, monitoring habit streaks, and visualizing weekly progress.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Features
 
-   ```bash
-   npm install
-   ```
+- **Tasks Management**: 
+  - Add, complete, and track daily tasks.
+  - **Soft Delete / Cleanup**: Remove completed tasks from your active view without losing statistics using the cleanup feature.
+- **Habits Tracking**: Track daily habits (e.g., Reading, Workout) and mark them as completed.
+- **Statistics**: 
+  - View overall completed tasks and habits.
+  - Calculate **Current Streak** and **Best Streak**.
+  - Interactive **Weekly Progress** bar chart.
+- **Mock Backend**: Uses `json-server` to act as a local database for fetching, adding, and updating tasks/habits.
 
-2. Start the app
+## 🛠️ Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+- **Framework**: [React Native](https://reactnative.dev) with [Expo](https://expo.dev/)
+- **Navigation**: [Expo Router](https://docs.expo.dev/router/introduction/) (File-based navigation)
+- **State Management & Data Fetching**: [TanStack Query (React Query)](https://tanstack.com/query/latest)
+- **UI & Styling**: Vector Icons, Linear Gradient, Safe Area Context.
+- **Charts**: [`react-native-gifted-charts`](https://git.io/gifted-charts)
+- **Backend Mocking**: `json-server`
 
-In the output, you'll find options to open the app in a
+## 📂 Project Structure
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- `app/` - Application routes and screens (using Expo Router).
+  - `(tabs)/` - Tab navigation screens (Home, Cleanup, Statistics).
+  - `add-task.tsx` - Screen for adding a new task.
+- `api/` - Contains logic for interacting with the backend (`task.tsx`, `habbit.tsx`).
+- `data/` - Contains the `db.json` file uses by json-server.
+- `constants/` - Theme configurations (colors, typography).
+- `function/` - Helper logic functions (e.g., calculating streaks, weekly progress).
+- `components/` - Reusable UI components.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 💻 How to Run Locally
 
-## Get a fresh project
+### 1. Prerequisites 
 
-When you're ready, run:
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
+
+### 2. Install Dependencies
 
 ```bash
-npm run reset-project
+npm install
+# or
+yarn install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 3. Start the Mock Server
 
-## Learn more
+Before starting the Expo app, you need to run the `json-server` to provide data for the app. Open a terminal and run:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npx json-server data/db.json
+```
+_Wait until the server runs (Usually on port 3000). Note: If you run it on a real device, you may need to update `API_URL` in `api/task.tsx` and `api/habbit.tsx` to use your computer's local network IP address (e.g., `http://192.168.1.X:3000`)._
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 4. Start the Application
 
-## Join the community
+Open a second terminal window/tab and run:
 
-Join our community of developers creating universal apps.
+```bash
+npx expo start
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Press `a` to run on an Android emulator, `i` to run on an iOS simulator, or scan the QR code with the Expo Go app on your physical device.
+
+---
+
+## 🎨 Theme Details
+The app uses a customized theme defined in `constants/theme.ts`:
+- **Primary**: Highlight and action elements.
+- **Secondary**: Success identifiers.
+- **Grey**: Background for text boxes and containers.
